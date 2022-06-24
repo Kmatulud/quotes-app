@@ -38,23 +38,26 @@ router.get("/users", async function (req, res) {
 router.post("/register", async (req, res) => {
 	try {
 		const { username, password, LoveCounter } = req.body;
-		console.log(req.body, "register");
-		check(
-			"username",
-			"Username must be atleast 3 characters and not contain numbers"
-		)
-			.isString()
-			.isLength({
-				min: 3
-			}),
-			check("password", "Password must be greater than 6 characters").isLength({
-				min: 6
-			});
+		console.log(req.body, "register"); 
+		// check(
+		// 	"username",
+		// 	"Username must be atleast 3 characters and not contain numbers"
+		// )
+		// 	.isString()
+		// 	.isLength({
+		// 		min: 3
+		// 	}),
+		// 	check("password", "Password must be greater than 6 characters").isLength({
+		// 		min: 6
+		// 	});
 
-		const errors = validationResult(req); 
-		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
-		}
+		// const errors = validationResult(req); 
+		// if (!errors.isEmpty()) {
+		// 	return res.status(400).json({ errors: errors.array() });
+		// }
+		// if(!req.body.isEmpty()){
+			
+		// }
 		bcrypt.hash(password, 10).then(async function (hash) {
 			let userDetails = `insert into love_user (user_name, pass_word, love_count) values($1, $2, $3)`;
 			await db.none(userDetails, [username, hash, LoveCounter]);
@@ -77,8 +80,7 @@ router.post("/login", async function (req, res) {
 	const user = await db.oneOrNone(
 		`select * from love_user where user_name=$1`,
 		[username]
-	);
-
+	); 
 	if (!user) return res.status(400).send("User does not exist");
 
 	const dbPassword = user.pass_word;
@@ -88,8 +90,9 @@ router.post("/login", async function (req, res) {
 	//create and assign token
 	const tokenUser = { name: username };
 	const token = jwt.sign(tokenUser, process.env.TOKEN_SECRET);
+	
 	res.header("access_token", token).send(token);
 	// res.send("Login successful" );
-});
+});  
 
 module.exports = router;

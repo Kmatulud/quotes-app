@@ -1,85 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="favicon.svg" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<script
-			defer
-			src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
-		></script>
-		<title>Vite App</title>
-	</head>
 
-	<body>
-		<div id="app"></div>
-		<div x-data="users">
-			<div x-show="isAuthenticated" class="login">
-				<!-- <div class="login"> -->
-					<form action="http://localhost:4000/api/user/login" method="post">
-					<div class="err" x-show="authErrorShow" x-text="authError"></div>
+<head>
+	<meta charset="UTF-8" />
+	<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<title>Vite App</title>
+</head>
 
-					<p>Don't have an account? <a href="#">Register</a></p>
-					<input
-						name="username"
-						value="username"
-						type="text"
-						x-model="username"
-						placeholder="Enter your username"
-					/>
-					<input
-						type="password"
-						x-model="password"
-						placeholder="Enter password"
-					/>
-					<button type="submit">Login</button>
-					</form>
-				</div>
-				<br />
-				<br />
-				<br />
-				<div x-show="!isAuthenticated" class="login">
-					<p>Already have an account? <a href="#">Login</a></p>
-					<input
-
-						type="text"
-						x-model="username2"
-						placeholder="Enter your username"
-					/>
-					<input
-						name="password"
-						value="password"
-
-						type="password"
-						x-model="password2"
-						placeholder="Enter password"
-					/>
-					<button @click="register()">Register</button>
-				<!-- </div> -->
-			</div>
-			<div :class="{'hidden': !isAuthenticated}">
-				<button @click="logout()" class="logoutBtn">Logout</button>
-			</div>
-
-			<div :class="{'hidden': !isAuthenticated}">
-				<div x-data="loveCounter">
-					<h1>Show some heart</h1>
-					<div x-text="hearts()"></div>
-					<div>
-						<button @click="love">Show 💟</button>
-					</div>
-				</div>
-				<div x-data="quoteApp" class="quote">
-					<h1>Quote App</h1>
-					<button @click="getQuote()">Next quote 📢</button>
-					<div class="quote">
-						<div x-text="quote.quote" class="content"></div>
-						<div><strong>by </strong><span x-text="quote.author"></span></div>
-					</div>
-				</div>
-			</div>
+<body>
+	<div id="app"></div>
+	<div x-data="users">
+		<div x-show="!isAuthenticated" class="login">
+				<div class="err" x-text="authError"></div>
+				<p>Don't have an account? <a href="#">Register</a></p>
+				<input type="text" x-model="username" placeholder="Enter your username" />
+				<input type="password" x-model="password" placeholder="Enter password" />
+				<button @click="login(), showHide()">Login</button>
 		</div>
-		<script src="./api.js"></script>
-		<script type="module" src="/main.js"></script>
-	</body>
+		<br />
+		<br />
+		<br />
+		<div x-show="!isAuthenticated" class="login">
+			<p>Already have an account? <a href="#">Login</a></p>
+			<div class="err" x-text="authError"></div>
+			<input type="text" x-model="username2" placeholder="Enter your username" />
+			<input type="password" x-model="password2" placeholder="Enter password" />
+			<button @click="register(), showHide()">Register</button>
+			<!-- </div> -->
+		</div>
+
+		<div :class="{'hidden': !isAuthenticated}">
+			<div x-data="loveCounter">
+				<h1>Show some heart</h1>
+				<div x-text="hearts()"></div>
+				<div>
+					<button @click="love">Show 💟</button>
+				</div>
+			</div>
+			<div x-data="quoteApp" class="quote">
+				<h1>Quote App</h1>
+				<button @click="getQuote()">Next quote 📢</button>
+				<div class="quote">
+					<div x-text="quote.quote" class="content"></div>
+					<div><strong>by </strong><span x-text="quote.author"></span></div>
+				</div>
+			</div>
+			<button @click="logout()" class="logoutBtn">Logout</button>
+		</div>
+	</div>
+	<script src="./api.js"></script>
+	<script type="module" src="/main.js"></script>
+</body>
+
 </html>

@@ -1,12 +1,11 @@
 document.addEventListener("alpine:init", () => {
-
 	Alpine.data("users", () => ({
 		init() {
-			fetch("/api/user/users")
-				.then((r) => r.json())
-				.then((data) => (this.user = data.data));
+				this.login(),
+				localStorage.getItem("token")
 		},
 		user: [],
+		authError: "",
 		password: "",
 		username: "",
 		password2: "",
@@ -14,56 +13,64 @@ document.addEventListener("alpine:init", () => {
 		isOpen: false,
 		isAuthenticated: false,
 		// user: null,
-		authError: null,
+		0.: null,
 		authErrorShow: false,
 		token: null,
- 
-		// async login() {
-		// 	try {
-		// 		const loginReq = await fetch("http://localhost:4000/api/user/login", {
-		// 			method: "POST",
-		// 			body: JSON.stringify({
-		// 				username: this.username,
-		// 				password: this.password,
-		// 			}),
-		// 			headers: {
-		// 				"Content-Type": "application/json",
-		// 			},
-		// 		});
-		// 		const loginRes = await loginReq.json();
 
-		// 		if (loginRes?.success) {
-		// 			this.authErrorShow = false;
-		// 			this.isAuthenticated = true;
-		// 			this.user = loginRes.user;
-		// 			localStorage.setItem("access_token", loginRes.access_token);
-		// 			this.user;
-		// 			console.log(loginRes);
-		// 			return;
-		// 		}
+		login() {
+			try {
+				const getToken = fetch("http://localhost:4000/api/user/login", {
+				method: "post",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					password: this.password,
+					username: this.username,
+				}),
+			})
+				if (getToken) {
+				localStorage.setItem("token", getToken.token);
+				return;
+			}
+			} catch (error) {
+				console.log(error);
+				this.authError = error;
+			}
+		},
 
-		// 		this.showErrors("Failed to login");
-		// 	} catch (error) {
-		// 		this.showErrors(error.message);
-		// 	}
-		// },
-
-			register() {
-				fetch("http://localhost:4000/api/user/register", {
-					password2: this.password2,
-					username2: this.username2,
-				})
+		register() {
+			fetch("http://localhost:4000/api/user/register", {
+				method: "post",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					password: this.password2,
+					username: this.username2,
+				}),
+			})
+				.then((response) => response.json())
 				.then((response) => {
 					console.log(response);
+					this.authError = "Success, Please Login";
 				})
-				.catch(error =>{
-					console.log(error);
-				})
-				// this.showErrors(error.message);
+				.catch((error) => {
+					this.authError = error.status;
+				});
 		},
 		showErrors(message) {
 			this.authError = message;
 			this.authErrorShow = true;
+		},
+		showHide(){
+			const token = localStorage.getItem("token");
+
+            if (token === undefined || token === null){
+                return true
+            }else{
+                return false
+            }
 		},
 		logout() {
 			this.isAuthenticated = !this.isAuthenticated;

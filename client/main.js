@@ -5,16 +5,14 @@ Alpine.plugin(persist)
 import Alpine from  'alpinejs';
 import LoveCounter from './love-counter';
 import Quotes from './quotes';
-// import Server from '../server/routes/auth'
+// import Users from './api'
 
 window.Alpine = Alpine;
 
 Alpine.data("quoteApp", Quotes);
 
-// Alpine.data("myApi", Server);
-
-
 Alpine.data("loveCounter", LoveCounter);
+// Alpine.data("users", Users);
 
 
 Alpine.start();
