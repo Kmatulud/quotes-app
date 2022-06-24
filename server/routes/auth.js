@@ -39,22 +39,22 @@ router.post("/register", async (req, res) => {
 	try {
 		const { username, password, LoveCounter } = req.body;
 		console.log(req.body, "register"); 
-		// check(
-		// 	"username",
-		// 	"Username must be atleast 3 characters and not contain numbers"
-		// )
-		// 	.isString()
-		// 	.isLength({
-		// 		min: 3
-		// 	}),
-		// 	check("password", "Password must be greater than 6 characters").isLength({
-		// 		min: 6
-		// 	});
+		check(
+			username,
+			"Username must be atleast 3 characters and not contain numbers"
+		)
+			.isString()
+			.isLength({
+				min: 3
+			}),
+			check(password, "Password must be greater than 6 characters").isLength({
+				min: 6
+			});
 
-		// const errors = validationResult(req); 
-		// if (!errors.isEmpty()) {
-		// 	return res.status(400).json({ errors: errors.array() });
-		// }
+		const errors = validationResult(req); 
+		if (!errors.isEmpty()) {
+			return res.status(400).json({ errors: errors.array() });
+		}
 		// if(!req.body.isEmpty()){
 			
 		// }
@@ -75,7 +75,7 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async function (req, res) {
-	const { username } = req.body;
+	const { password, username } = req.body;
 
 	const user = await db.oneOrNone(
 		`select * from love_user where user_name=$1`,
@@ -83,9 +83,9 @@ router.post("/login", async function (req, res) {
 	); 
 	if (!user) return res.status(400).send("User does not exist");
 
-	const dbPassword = user.pass_word;
+	const dbPassword = user.pass_word; 
 
-	const validPass = await bcrypt.compare(req.body.password, dbPassword);
+	const validPass = await bcrypt.compare(password, dbPassword);
 	if (!validPass) return res.status(400).send("Invalid credentials"); 
 	//create and assign token
 	const tokenUser = { name: username };

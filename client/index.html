@@ -17,7 +17,7 @@
 				<p>Don't have an account? <a href="#">Register</a></p>
 				<input type="text" x-model="username" placeholder="Enter your username" />
 				<input type="password" x-model="password" placeholder="Enter password" />
-				<button @click="login(), showHide()">Login</button>
+				<button @click="login(), isOpen = showHide()">Login</button>
 		</div>
 		<br />
 		<br />
@@ -27,7 +27,7 @@
 			<div class="err" x-text="authError"></div>
 			<input type="text" x-model="username2" placeholder="Enter your username" />
 			<input type="password" x-model="password2" placeholder="Enter password" />
-			<button @click="register(), showHide()">Register</button>
+			<button @click="register(), isOpen = showHide()">Register</button>
 			<!-- </div> -->
 		</div>
 
